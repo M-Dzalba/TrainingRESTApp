@@ -8,3 +8,8 @@ CREATE TABLE person(
 INSERT INTO person(name, age, email) VALUES ('Tom',25,'tom@mail.ru');
 INSERT INTO person(name, age, email) VALUES ('Bob',51,'bob@mail.ru');
 INSERT INTO person(name, age, email) VALUES ('Katy',38,'katy@mail.ru');
+
+
+ALTER TABLE person ADD COLUMN created_at timestamp,
+                   ADD COLUMN updated_at timestamp,
+                   ADD COLUMN created_who varchar;

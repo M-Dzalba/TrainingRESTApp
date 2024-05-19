@@ -7,12 +7,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
+import ru.dzalba.FirstRESTApp.DTO.PersonDTO;
 import ru.dzalba.FirstRESTApp.models.Person;
 import ru.dzalba.FirstRESTApp.services.PeopleService;
 import ru.dzalba.FirstRESTApp.util.PersonErrorResponse;
 import ru.dzalba.FirstRESTApp.util.PersonNotCreatedException;
 import ru.dzalba.FirstRESTApp.util.PersonNotFoundException;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -33,7 +35,7 @@ public class PeopleController {
     }
 
     @PostMapping
-    public ResponseEntity<HttpStatus> create(@RequestBody @Valid Person person,
+    public ResponseEntity<HttpStatus> create(@RequestBody @Valid PersonDTO personDTO,
                                              BindingResult bindingResult){
         if(bindingResult.hasErrors()){
             StringBuilder errorMsg=new StringBuilder();
@@ -45,9 +47,20 @@ public class PeopleController {
             }
             throw new PersonNotCreatedException(errorMsg.toString());
         }
-        peopleService.save(person);
+        peopleService.save(convertToPerson(personDTO));
         return ResponseEntity.ok(HttpStatus.OK); //пустое тело со статусом 200
     }
+
+    private Person convertToPerson(PersonDTO personDTO) {
+        Person person=new Person();
+        person.setName(personDTO.getName());
+        person.setAge(personDTO.getAge());
+        person.setEmail(personDTO.getEmail());
+
+        return person;
+    }
+
+
 
     @ExceptionHandler
     private ResponseEntity<PersonErrorResponse>handleException(PersonNotFoundException e){
