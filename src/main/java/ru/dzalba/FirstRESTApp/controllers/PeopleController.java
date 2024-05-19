@@ -1,6 +1,7 @@
 package ru.dzalba.FirstRESTApp.controllers;
 
 import jakarta.validation.Valid;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -52,12 +53,8 @@ public class PeopleController {
     }
 
     private Person convertToPerson(PersonDTO personDTO) {
-        Person person=new Person();
-        person.setName(personDTO.getName());
-        person.setAge(personDTO.getAge());
-        person.setEmail(personDTO.getEmail());
-
-        return person;
+        ModelMapper modelMapper=new ModelMapper();
+        return modelMapper.map(personDTO,Person.class);
     }
 
 
